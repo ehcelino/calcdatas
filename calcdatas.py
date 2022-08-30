@@ -184,6 +184,7 @@ class calculadora:
                     self.window['-OUTPUT-'].update(value=str(abs(timedelta.days)) + ' dias')
                     self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' DIFERENÇA')
                     self.window['-SAIDA-'].print('= ' + str(abs(timedelta.days)))
+
             if self.event == '-DIASUTEIS-':
                 tmp = strip_datas(self.values['-INPUT1-'])
                 print('TMP: ', tmp)

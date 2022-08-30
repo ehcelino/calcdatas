@@ -1,121 +1,128 @@
 #:kivy 2.1
 
-FloatLayout:
+Screen:
+    FloatLayout:
+        id: flt_layout
+        TextInput:
+            id: ti_historico
+            text: "Text Input, start typing here\nmultiline\nsupport"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .1, 'y': .795}
+            height: '80dp'
+            width: '240dp'
+            # background_color: .8, .8, 0, 1
+            # size_hint: .20, .05
+            # pos_hint: {'x': .5, 'y': .5}
 
-    TextInput:
-        id: ti_historico
-        text: "Text Input, start typing here\nmultiline\nsupport"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .1, 'y': .795}
-        height: '80dp'
-        width: '240dp'
-        # background_color: .8, .8, 0, 1
-        # size_hint: .20, .05
-        # pos_hint: {'x': .5, 'y': .5}
+        TextInput:
+            id: ti_operacao
+            size_hint_y: None
+            size_hint_x: None
+            height: '32dp'
+            multiline: False
+            # text: 'Monoline textinput'
+            focus: True
+            pos_hint: {'x': .1, 'y': .715}
+            height: '30dp'
+            width: '240dp'
+            # on_text: app.teste_texto(ti_operacao, ti_operacao.text)
 
-    TextInput
-        id: ti_operacao
-        size_hint_y: None
-        size_hint_x: None
-        height: '32dp'
-        multiline: False
-        text: 'Monoline textinput'
-        focus: True
-        pos_hint: {'x': .1, 'y': .715}
-        height: '30dp'
-        width: '240dp'
+        TextInput:
+            id: ti_resultado
+            size_hint_y: None
+            size_hint_x: None
+            height: '32dp'
+            multiline: False
+            # text: 'Monoline textinput'
+            # focus: True
+            pos_hint: {'x': .1, 'y': .633}
+            height: '30dp'
+            width: '240dp'
 
-    TextInput
-        id: ti_resultado
-        size_hint_y: None
-        size_hint_x: None
-        height: '32dp'
-        multiline: False
-        text: 'Monoline textinput'
-        # focus: True
-        pos_hint: {'x': .1, 'y': .633}
-        height: '30dp'
-        width: '240dp'
+        Button:
+            id: bu_dias
+            text: "DIAS"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .1, 'y': .53}
+            height: '40dp'
+            width: '80dp'
+            # pos: 100, 100
+            # size_hint: .1, .05
+            on_release: app.botao_dias()
 
-    Button:
-        id: bu_dias
-        text: "DIAS"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .1, 'y': .53}
-        height: '40dp'
-        width: '80dp'
-        # pos: 100, 100
-        # size_hint: .1, .05
+        Button:
+            id: bu_meses
+            text: "MESES"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .365, 'y': .53}
+            height: '40dp'
+            width: '80dp'
+            # pos: 100, 200
+            # size_hint: .4, .2
+            on_release: app.botao_meses()
 
-    Button:
-        id: bu_meses
-        text: "MESES"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .365, 'y': .53}
-        height: '40dp'
-        width: '80dp'
-        # pos: 100, 200
-        # size_hint: .4, .2
+        Button:
+            id: bu_anos
+            text: "ANOS"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .63, 'y': .53}
+            height: '40dp'
+            width: '80dp'
+            # size_hint: .1, .05
+            on_release: app.botao_anos()
 
-    Button:
-        id: bu_anos
-        text: "ANOS"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .63, 'y': .53}
-        height: '40dp'
-        width: '80dp'
-        # size_hint: .1, .05
+        Button:
+            id: bu_hoje
+            text: "HOJE"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .365, 'y': .43}
+            height: '40dp'
+            width: '80dp'
+            # size_hint: .1, .05
+            on_release: app.botao_hoje()
 
-    Button:
-        id: bu_hoje
-        text: "HOJE"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .365, 'y': .43}
-        height: '40dp'
-        width: '80dp'
-        # size_hint: .1, .05
+        Button:
+            id: bu_diasem
+            text: "DIA DA SEMANA"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .1, 'y': .33}
+            height: '40dp'
+            width: '235dp'
+            # size_hint: .1, .05
 
-    Button:
-        id: bu_diasem
-        text: "DIA DA SEMANA"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .1, 'y': .33}
-        height: '40dp'
-        width: '235dp'
-        # size_hint: .1, .05
+        Button:
+            id: bu_diasuteis
+            text: "DIAS ÚTEIS ENTRE DATAS"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .1, 'y': .23}
+            height: '40dp'
+            width: '235dp'
+            # size_hint: .1, .05
+            on_release: app.botao_dias_uteis()
 
-    Button:
-        id: bu_diasuteis
-        text: "DIAS ÚTEIS ENTRE DATAS"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .1, 'y': .23}
-        height: '40dp'
-        width: '235dp'
-        # size_hint: .1, .05
+        Button:
+            id: bu_diferenca
+            text: "DIFERENÇA ENTRE DATAS"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .1, 'y': .13}
+            height: '40dp'
+            width: '235dp'
+            # size_hint: .1, .05
 
-    Button:
-        id: bu_diferenca
-        text: "DIFERENÇA ENTRE DATAS"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .1, 'y': .13}
-        height: '40dp'
-        width: '235dp'
-        # size_hint: .1, .05
-
-    Button:
-        id: bu_sair
-        text: "SAIR"
-        size_hint_y: None
-        size_hint_x: None
-        pos_hint: {'x': .62, 'y': .03}
-        height: '40dp'
-        width: '80dp'
-        # size_hint: .1, .05
+        Button:
+            id: bu_sair
+            text: "SAIR"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .62, 'y': .03}
+            height: '40dp'
+            width: '80dp'
+            # size_hint: .1, .05
