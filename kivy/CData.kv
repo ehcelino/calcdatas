@@ -1,18 +1,18 @@
 #:kivy 2.1
 
-Screen:
-    FloatLayout:
-        id: flt_layout
-        background_color: [1, 1, 0, 1]
-
+ScreenManager:
+    id: sm
+    Screen:
+        name: 'scr_one'
         TextInput:
             id: ti_historico
-            text: "Text Input, start typing here\nmultiline\nsupport"
+            # text: "Text Input, start typing here\nmultiline\nsupport"
             size_hint_y: None
             size_hint_x: None
             pos_hint: {'x': .1, 'y': .795}
             height: '80dp'
             width: '240dp'
+            readonly: True
             # background_color: .8, .8, 0, 1
             # size_hint: .20, .05
             # pos_hint: {'x': .5, 'y': .5}
@@ -95,7 +95,7 @@ Screen:
             size_hint_x: None
             pos_hint: {'x': .1, 'y': .33}
             height: '40dp'
-            width: '235dp'
+            width: '238dp'
             # size_hint: .1, .05
             on_release: app.botao_dia_semana()
 
@@ -106,7 +106,7 @@ Screen:
             size_hint_x: None
             pos_hint: {'x': .1, 'y': .23}
             height: '40dp'
-            width: '235dp'
+            width: '238dp'
             # size_hint: .1, .05
             on_release: app.botao_dias_uteis()
 
@@ -117,7 +117,7 @@ Screen:
             size_hint_x: None
             pos_hint: {'x': .1, 'y': .13}
             height: '40dp'
-            width: '235dp'
+            width: '238dp'
             # size_hint: .1, .05
             on_release: app.botao_diferenca()
 
@@ -126,8 +126,46 @@ Screen:
             text: "SAIR"
             size_hint_y: None
             size_hint_x: None
-            pos_hint: {'x': .62, 'y': .03}
+            pos_hint: {'x': .63, 'y': .03}
             height: '40dp'
             width: '80dp'
             # size_hint: .1, .05
             on_release: app.close()
+
+        Button:
+            id: bu_ajuda
+            text: "AJUDA"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .365, 'y': .03}
+            height: '40dp'
+            width: '80dp'
+            # pos: 100, 200
+            # size_hint: .4, .2
+            on_release: sm.current = 'scr_two'
+
+    Screen:
+        name: 'scr_two'
+        TextInput:
+            id: ti_ajuda
+            text: "Para calcular, digite a data no formato 00/00/0000 + ou - a quantidade de dias/meses/anos.\nPara diferença, digite as duas datas: 00/00/0000-00/00/0000.\nPara dia da semana, digite a data: 00/00/0000.\nPara dias úteis entre datas, digite as duas datas: 00/00/0000-00/00/0000.\nPara diferença entre datas (em dias), digite as duas datas: 00/00/0000-00/00/0000."
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .1, 'y': .4}
+            height: '280dp'
+            width: '240dp'
+            readonly: True
+            # background_color: .8, .8, 0, 1
+            # size_hint: .20, .05
+            # pos_hint: {'x': .5, 'y': .5}
+
+        Button:
+            id: bu_voltar
+            text: "VOLTAR"
+            size_hint_y: None
+            size_hint_x: None
+            pos_hint: {'x': .63, 'y': .03}
+            height: '40dp'
+            width: '80dp'
+            # size_hint: .1, .05
+            on_release: sm.current = 'scr_one'
