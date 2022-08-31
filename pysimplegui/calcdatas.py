@@ -201,16 +201,17 @@ class calculadora:
 
             if self.event == '-DIASEM-':
                 tmp = self.values['-INPUT1-']
-                if tmp != '' and re.fullmatch(regexdata, tmp):
+                tmp3 = tmp.replace(" ", "")
+                if tmp3 != '' and re.fullmatch(regexdata, tmp3):
                     try:
-                        tmp2 = bool(datetime.strptime(tmp, '%d/%m/%Y'))
+                        tmp2 = bool(datetime.strptime(tmp3, '%d/%m/%Y'))
                     except ValueError:
                         tmp2 = False
                 else:
                     tmp2 = False
 
                 if tmp2:
-                    dt_tmp = datetime.strptime(tmp, '%d/%m/%Y')
+                    dt_tmp = datetime.strptime(tmp3, '%d/%m/%Y')
                     tmp = datetime.strftime(dt_tmp, '%A')
                     self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' DIA DA SEMANA')
                     self.window['-OUTPUT-'].update(value=tmp)

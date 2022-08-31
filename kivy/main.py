@@ -36,12 +36,6 @@ class CDataApp(App):
         pass
         # return Button(text='Hello World')
 
-    def open_help(self):
-        popup = Popup(title='Test popup',
-                      content=Label(text='Hello world'),
-                      size_hint=(None, None), size=(400, 400))
-        popup.open()
-
 
     def valida_data(self, data):
         resultado =  False
@@ -223,18 +217,31 @@ class CDataApp(App):
                 historico + '\nEntre ' + tmp[0] + ' e ' + tmp[1] + ' há\n' + str(abs(tmp2)) + ' dias úteis.'
 
     def botao_dia_semana(self):
-        tmp = self.ler_operacao()
-        print('TMP: ', tmp)
-        if tmp == 'ERRO':
-            print('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
-            self.root.ids.ti_resultado.text = 'Operação inválida.'
+        # tmp = self.ler_operacao()
+        tmp = self.root.ids.ti_operacao.text
+        tmp3 = tmp.replace(" ", "")
+        if tmp3 != '' and re.fullmatch(regexdata, tmp3):
+            try:
+                tmp2 = bool(datetime.strptime(tmp3, '%d/%m/%Y'))
+            except ValueError:
+                tmp2 = False
         else:
-            dt_tmp = datetime.strptime(tmp, '%d/%m/%Y')
+            tmp2 = False
+
+        if tmp2:
+        # print('TMP: ', tmp)
+        # if tmp == 'ERRO':
+        #     print('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
+        #     self.root.ids.ti_resultado.text = 'Operação inválida.'
+        # else:
+            dt_tmp = datetime.strptime(tmp3, '%d/%m/%Y')
             tmp2 = datetime.strftime(dt_tmp, '%A')
             self.root.ids.ti_resultado.text = tmp2
             historico = self.root.ids.ti_historico.text
             self.root.ids.ti_historico.text = \
                 historico + '\n' + 'Dia ' + tmp + ' = ' + tmp2
+        else:
+            self.root.ids.ti_resultado.text = 'Operação inválida.'
 
     def botao_diferenca(self):
         # tmp = self.ler_operacao()
