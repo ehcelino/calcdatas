@@ -9,13 +9,14 @@ from dateutil.relativedelta import relativedelta
 from kivy.uix.textinput import TextInput
 import re
 import numpy as np
+import locale
 
 Window.size = (300, 550)
 
 regexdata = re.compile(r'^(\d{2})[-.\/](\d{2})[-.\/](\d{4})$')
 regexvalor = re.compile(r'(\d)*')
 
-
+locale.setlocale(locale.LC_ALL, '')
 
 
 class CDataApp(App):
@@ -24,9 +25,9 @@ class CDataApp(App):
         super().__init__(**kwargs)
         self.screen = Builder.load_file('CData.kv')
 
-    def teste_texto(self, instance, value):
-        print('The widget', instance, 'have:', value)
-        return value
+    # def teste_texto(self, instance, value):
+    #     print('The widget', instance, 'have:', value)
+    #     return value
 
     def build(self):
         pass
@@ -161,13 +162,41 @@ class CDataApp(App):
         print('TMP: ', tmp)
         if tmp == 'ERRO':
             print('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
+        elif tmp[2] not in ('+', '-'):
+            print('Operação inválida.')
         else:
             print('TMP 0 and 1', tmp[0], tmp[1])
             data1 = datetime.strptime(tmp[0], '%d/%m/%Y')
             data2 = datetime.strptime(tmp[1], '%d/%m/%Y')
-            res = np.busday_count(data1.strftime('%Y-%m-%d'), data2.strftime('%Y-%m-%d'))
-            self.root.ids.ti_resultado.text = str(res) + ' dias'
+            tmp2 = np.busday_count(data1.strftime('%Y-%m-%d'), data2.strftime('%Y-%m-%d'))
+            self.root.ids.ti_resultado.text = str(abs(tmp2)) + ' dias'
 
+
+    def botao_dia_semana(self):
+        tmp = self.ler_operacao()
+        print('TMP: ', tmp)
+        if tmp == 'ERRO':
+            print('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
+        else:
+            dt_tmp = datetime.strptime(tmp, '%d/%m/%Y')
+            tmp = datetime.strftime(dt_tmp, '%A')
+            self.root.ids.ti_resultado.text = tmp
+
+    def botao_diferenca(self):
+        tmp = self.ler_operacao()
+        print('TMP: ', tmp)
+        if tmp == 'ERRO':
+            print('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
+        elif tmp[2] not in ('+', '-'):
+            print('Operação inválida.')
+        else:
+            data1 = datetime.strptime(tmp[0], '%d/%m/%Y')
+            data2 = datetime.strptime(tmp[1], '%d/%m/%Y')
+            timedelta = data1 - data2
+            self.root.ids.ti_resultado.text = str(abs(timedelta.days)) + ' dias'
+
+    def close(self):
+        self.stop()
 
 if __name__ == '__main__':
     CDataApp().run()

@@ -3,6 +3,8 @@
 Screen:
     FloatLayout:
         id: flt_layout
+        background_color: [1, 1, 0, 1]
+
         TextInput:
             id: ti_historico
             text: "Text Input, start typing here\nmultiline\nsupport"
@@ -95,6 +97,7 @@ Screen:
             height: '40dp'
             width: '235dp'
             # size_hint: .1, .05
+            on_release: app.botao_dia_semana()
 
         Button:
             id: bu_diasuteis
@@ -116,6 +119,7 @@ Screen:
             height: '40dp'
             width: '235dp'
             # size_hint: .1, .05
+            on_release: app.botao_diferenca()
 
         Button:
             id: bu_sair
@@ -126,3 +130,4 @@ Screen:
             height: '40dp'
             width: '80dp'
             # size_hint: .1, .05
+            on_release: app.close()
