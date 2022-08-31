@@ -92,33 +92,33 @@ class CDataApp(App):
         else:
             return 'ERRO'
 
-    def ler_operacao(self):
-        resultado = None
-        texto = self.root.ids.ti_operacao.text
-        # texto = self.screen.ids.ti_operacao.text
-        print(texto)
-        texto_limpo = texto.replace(" ", "")
-        if re.fullmatch(regexdata, texto_limpo):
-            if self.valida_data(texto_limpo):
-                resultado = texto_limpo
-        elif texto_limpo.find('+') != -1:
-            strings = texto_limpo.split('+')
-            if self.valida_data(strings[0]) and re.fullmatch(regexvalor, strings[1]):
-                resultado = (strings[0], strings[1], '+')
-            else:
-                resultado = 'ERRO'
-        elif texto_limpo.find('-') != -1:
-            strings = texto_limpo.split('-')
-            if self.valida_data(strings[0]) and re.fullmatch(regexvalor, strings[1]):
-                resultado = (strings[0], strings[1], '-')
-            elif self.valida_data(strings[0]) and self.valida_data(strings[1]):
-                resultado = (strings[0], strings[1])
-            else:
-                resultado = 'ERRO'
-        else:
-            resultado = 'ERRO'
-        print('Resultado: ', resultado)
-        return resultado
+    # def ler_operacao(self):
+    #     resultado = None
+    #     texto = self.root.ids.ti_operacao.text
+    #     # texto = self.screen.ids.ti_operacao.text
+    #     print(texto)
+    #     texto_limpo = texto.replace(" ", "")
+    #     if re.fullmatch(regexdata, texto_limpo):
+    #         if self.valida_data(texto_limpo):
+    #             resultado = texto_limpo
+    #     elif texto_limpo.find('+') != -1:
+    #         strings = texto_limpo.split('+')
+    #         if self.valida_data(strings[0]) and re.fullmatch(regexvalor, strings[1]):
+    #             resultado = (strings[0], strings[1], '+')
+    #         else:
+    #             resultado = 'ERRO'
+    #     elif texto_limpo.find('-') != -1:
+    #         strings = texto_limpo.split('-')
+    #         if self.valida_data(strings[0]) and re.fullmatch(regexvalor, strings[1]):
+    #             resultado = (strings[0], strings[1], '-')
+    #         elif self.valida_data(strings[0]) and self.valida_data(strings[1]):
+    #             resultado = (strings[0], strings[1])
+    #         else:
+    #             resultado = 'ERRO'
+    #     else:
+    #         resultado = 'ERRO'
+    #     print('Resultado: ', resultado)
+    #     return resultado
 
     def calcula(self, data1, valor, operacao, opcao):
         """
