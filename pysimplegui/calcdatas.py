@@ -46,7 +46,7 @@ def strip_operacao(operacao=''):
         return 'ERRO'
 
 
-def strip_datas(self, datas):
+def strip_datas(datas):
     result = True
     datas = datas.replace(" ", "")
     if datas == '':
