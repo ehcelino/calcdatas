@@ -114,14 +114,16 @@ def janela_calculadora():
     mensagem5 = 'Para diferença entre datas (em dias), digite as duas datas: 00/00/0000-00/00/0000.'
     mensagem6 = 'Clique em "como usar" para voltar.'
     frame_layout = [
-        [sg.Multiline(k='-SAIDA-', s=(29, 10), border_width=0, do_not_clear=True)],
+        [sg.Multiline(k='-SAIDA-', s=(29, 8), border_width=0, do_not_clear=True)],
         [sg.T('Operação:')],
         [sg.I(k='-INPUT1-', s=(20, 1), border_width=0, focus=True, font='_ 14 bold',
-              tooltip='Digite a data (00/00/0000) + ou - a quantidade e clique em um dos botões.')],
+              tooltip='Digite a data (00/00/0000) + ou - a quantidade e clique em um dos botões.'
+              , enable_events=True)],
         # [sg.I(k='-INPUT2-', s=(26, 1), border_width=0, justification='right')],
         # [sg.I(k='-OPERACAO-', s=(26, 1), border_width=0, justification='right')],
         [sg.T('Resultado:')],
         [sg.I(k='-OUTPUT-', s=(20, 1), border_width=0, font='_ 14 bold')],
+        [sg.Multiline(k='-OUTPUT2-', s=(20, 2), border_width=0, font='_ 14 bold', no_scrollbar=True)],
         # [sg.B('+', k='-+-', s=b), sg.B('-', k='---', s=b)],
         [sg.B('DIAS', k='-DIAS-', s=b), sg.B('MESES', k='-MESES-', s=b),
          sg.B('ANOS', k='-ANOS-', s=b)],
@@ -142,8 +144,8 @@ def janela_calculadora():
     ]
     layout = [
         [sg.T('Calculadora de datas')],
-        [sg.Frame('', frame_layout, element_justification='center', visible=True, k='-FRAME1-', s=(240, 440)),
-         sg.Frame('', frame_layout2, visible=False, k='-FRAME2-', s=(240, 440))],
+        [sg.Frame('', frame_layout, element_justification='center', visible=True, k='-FRAME1-', s=(240, 480)),
+         sg.Frame('', frame_layout2, visible=False, k='-FRAME2-', s=(240, 480))],
         [sg.Push(), sg.B('COMO USAR', k='-AJUDA-'), sg.B('SAIR', k='-SAIR-')]
     ]
 
@@ -165,6 +167,9 @@ class calculadora:
     def run(self):
         while True:
             self.event, self.values = self.window.read()
+
+            if self.event == '-INPUT1-' and self.values['-INPUT1-'] and self.values['-INPUT1-'][-1] not in ('0123456789/-+'):
+                self.window['-INPUT1-'].update(self.values['-INPUT1-'][:-1])
 
             if self.event == '-AJUDA-':
                 # sg.popup(self.mensagem)
@@ -236,6 +241,8 @@ class calculadora:
                     resultado = calcula(op[0], op[1], op[2], 'D')
                     self.window['-OUTPUT-'].update(value=resultado)
                     self.window['-SAIDA-'].print('= ' + resultado)
+                    extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
+                    self.window['-OUTPUT2-'].update(value=extenso)
                     # self.operacao = False
 
             if self.event == '-MESES-':
@@ -247,6 +254,8 @@ class calculadora:
                     resultado = calcula(op[0], op[1], op[2], 'M')
                     self.window['-OUTPUT-'].update(value=resultado)
                     self.window['-SAIDA-'].print('= ' + resultado)
+                    extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
+                    self.window['-OUTPUT2-'].update(value=extenso)
                     # self.operacao = False
 
             if self.event == '-ANOS-':
@@ -258,10 +267,14 @@ class calculadora:
                     resultado = calcula(op[0], op[1], op[2], 'A')
                     self.window['-OUTPUT-'].update(value=resultado)
                     self.window['-SAIDA-'].print('= ' + resultado)
+                    extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
+                    self.window['-OUTPUT2-'].update(value=extenso)
                     # self.operacao = False
 
             if self.event == '-HOJE-':
                 self.window['-INPUT1-'].update(value=datetime.strftime(date.today(), form_data))
+                extenso = datetime.strftime(date.today(), '%A, %d de %B de %Y')
+                self.window['-OUTPUT2-'].update(value=extenso)
 
             if self.event in (sg.WIN_CLOSED, '-SAIR-'):
                 break
