@@ -13,13 +13,14 @@ regexvalor = re.compile(r'(\d)*')
 
 sg.theme('SystemDefaultForReal')
 
+form_data = '%d/%m/%Y'
 
 def valida(data, valor):
     tmp = True
     if not re.fullmatch(regexdata, data):
         tmp = False
     try:
-        tmp = bool(datetime.strptime(data, '%d/%m/%Y'))
+        tmp = bool(datetime.strptime(data, form_data))
     except ValueError:
         tmp = False
     if not re.fullmatch(regexvalor, valor):
@@ -45,7 +46,7 @@ def strip_operacao(operacao=''):
         return 'ERRO'
 
 
-def strip_datas(datas):
+def strip_datas(self, datas):
     result = True
     datas = datas.replace(" ", "")
     if datas == '':
@@ -56,6 +57,13 @@ def strip_datas(datas):
         return 'ERRO'
     else:
         strings = datas.split('-')
+        print(strings)
+        try:
+            tmp = bool(datetime.strptime(strings[0], form_data))
+            tmp = bool(datetime.strptime(strings[1], form_data))
+        except ValueError as err:
+            print('erro: ', err)
+            return 'ERRO'
         if not re.fullmatch(regexdata, strings[0]) or not re.fullmatch(regexdata, strings[1]):
             result = False
             return 'ERRO'
@@ -72,8 +80,8 @@ def calcula(data1, valor, operacao, opcao):
     :param opcao: string (D, M, A)
     :return: string
     """
-    data1_date = datetime.strptime(data1, '%d/%m/%Y')
-    # data2_date = datetime.strptime(data2, '%d/%m/%Y')
+    data1_date = datetime.strptime(data1, form_data)
+    # data2_date = datetime.strptime(data2, form_data)
     if operacao == '+':
         if opcao == 'D':
             data_final_date = data1_date + relativedelta(days=int(valor))
@@ -82,7 +90,7 @@ def calcula(data1, valor, operacao, opcao):
             data_final_date = data1_date + relativedelta(months=+int(valor))
         elif opcao == 'A':
             data_final_date = data1_date + relativedelta(years=int(valor))
-        data_final_str = datetime.strftime(data_final_date, '%d/%m/%Y')
+        data_final_str = datetime.strftime(data_final_date, form_data)
         return data_final_str
 
     if operacao == '-':
@@ -93,7 +101,7 @@ def calcula(data1, valor, operacao, opcao):
             data_final_date = data1_date - relativedelta(months=int(valor))
         elif opcao == 'A':
             data_final_date = data1_date - relativedelta(years=int(valor))
-        data_final_str = datetime.strftime(data_final_date, '%d/%m/%Y')
+        data_final_str = datetime.strftime(data_final_date, form_data)
         return data_final_str
 
 
@@ -178,8 +186,8 @@ class calculadora:
                 if tmp == 'ERRO':
                     sg.popup('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
                 else:
-                    data1 = datetime.strptime(tmp[0], '%d/%m/%Y')
-                    data2 = datetime.strptime(tmp[1], '%d/%m/%Y')
+                    data1 = datetime.strptime(tmp[0], form_data)
+                    data2 = datetime.strptime(tmp[1], form_data)
                     timedelta = data1 - data2
                     self.window['-OUTPUT-'].update(value=str(abs(timedelta.days)) + ' dias')
                     self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' DIFERENÇA')
@@ -192,8 +200,8 @@ class calculadora:
                     sg.popup('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
                 else:
                     print('TMP 0 and 1', tmp[0], tmp[1])
-                    data1 = datetime.strptime(tmp[0], '%d/%m/%Y')
-                    data2 = datetime.strptime(tmp[1], '%d/%m/%Y')
+                    data1 = datetime.strptime(tmp[0], form_data)
+                    data2 = datetime.strptime(tmp[1], form_data)
                     res = np.busday_count(data1.strftime('%Y-%m-%d'), data2.strftime('%Y-%m-%d'))
                     self.window['-OUTPUT-'].update(value=str(res) + ' dias')
                     self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' DIAS ÚTEIS')
@@ -204,14 +212,14 @@ class calculadora:
                 tmp3 = tmp.replace(" ", "")
                 if tmp3 != '' and re.fullmatch(regexdata, tmp3):
                     try:
-                        tmp2 = bool(datetime.strptime(tmp3, '%d/%m/%Y'))
+                        tmp2 = bool(datetime.strptime(tmp3, form_data))
                     except ValueError:
                         tmp2 = False
                 else:
                     tmp2 = False
 
                 if tmp2:
-                    dt_tmp = datetime.strptime(tmp3, '%d/%m/%Y')
+                    dt_tmp = datetime.strptime(tmp3, form_data)
                     tmp = datetime.strftime(dt_tmp, '%A')
                     self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' DIA DA SEMANA')
                     self.window['-OUTPUT-'].update(value=tmp)
@@ -253,7 +261,7 @@ class calculadora:
                     # self.operacao = False
 
             if self.event == '-HOJE-':
-                self.window['-INPUT1-'].update(value=datetime.strftime(date.today(), '%d/%m/%Y'))
+                self.window['-INPUT1-'].update(value=datetime.strftime(date.today(), form_data))
 
             if self.event in (sg.WIN_CLOSED, '-SAIR-'):
                 break

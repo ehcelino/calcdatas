@@ -21,6 +21,7 @@ regexvalor = re.compile(r'(\d)*')
 
 locale.setlocale(locale.LC_ALL, '')
 
+form_data = '%d/%m/%Y'
 
 class CDataApp(App):
 
@@ -40,7 +41,7 @@ class CDataApp(App):
     def valida_data(self, data):
         resultado =  False
         try:
-            tmp = bool(datetime.strptime(data, '%d/%m/%Y'))
+            tmp = bool(datetime.strptime(data, form_data))
             resultado = True
         except ValueError:
             resultado = False
@@ -57,6 +58,13 @@ class CDataApp(App):
             return 'ERRO'
         else:
             strings = datas.split('-')
+            print(strings)
+            try:
+                tmp = bool(datetime.strptime(strings[0], form_data))
+                tmp = bool(datetime.strptime(strings[1], form_data))
+            except ValueError as err:
+                print('erro: ', err)
+                return 'ERRO'
             if not re.fullmatch(regexdata, strings[0]) or not re.fullmatch(regexdata, strings[1]):
                 result = False
                 return 'ERRO'
@@ -68,7 +76,7 @@ class CDataApp(App):
         if not re.fullmatch(regexdata, data):
             tmp = False
         try:
-            tmp = bool(datetime.strptime(data, '%d/%m/%Y'))
+            tmp = bool(datetime.strptime(data, form_data))
         except ValueError:
             tmp = False
         if not re.fullmatch(regexvalor, valor):
@@ -129,8 +137,8 @@ class CDataApp(App):
         :param opcao: string (D, M, A)
         :return: string
         """
-        data1_date = datetime.strptime(data1, '%d/%m/%Y')
-        # data2_date = datetime.strptime(data2, '%d/%m/%Y')
+        data1_date = datetime.strptime(data1, form_data)
+        # data2_date = datetime.strptime(data2, form_data)
         if operacao == '+':
             if opcao == 'D':
                 data_final_date = data1_date + relativedelta(days=int(valor))
@@ -139,7 +147,7 @@ class CDataApp(App):
                 data_final_date = data1_date + relativedelta(months=+int(valor))
             elif opcao == 'A':
                 data_final_date = data1_date + relativedelta(years=int(valor))
-            data_final_str = datetime.strftime(data_final_date, '%d/%m/%Y')
+            data_final_str = datetime.strftime(data_final_date, form_data)
             return data_final_str
 
         if operacao == '-':
@@ -150,7 +158,7 @@ class CDataApp(App):
                 data_final_date = data1_date - relativedelta(months=int(valor))
             elif opcao == 'A':
                 data_final_date = data1_date - relativedelta(years=int(valor))
-            data_final_str = datetime.strftime(data_final_date, '%d/%m/%Y')
+            data_final_str = datetime.strftime(data_final_date, form_data)
             return data_final_str
 
     def botao_dias(self):
@@ -195,7 +203,7 @@ class CDataApp(App):
 
 
     def botao_hoje(self):
-        self.root.ids.ti_operacao.text = datetime.strftime(date.today(), '%d/%m/%Y')
+        self.root.ids.ti_operacao.text = datetime.strftime(date.today(), form_data)
 
     def botao_dias_uteis(self):
         # tmp = self.ler_operacao()
@@ -208,8 +216,8 @@ class CDataApp(App):
         #     print('Operação inválida.')
         else:
             print('TMP 0 and 1', tmp[0], tmp[1])
-            data1 = datetime.strptime(tmp[0], '%d/%m/%Y')
-            data2 = datetime.strptime(tmp[1], '%d/%m/%Y')
+            data1 = datetime.strptime(tmp[0], form_data)
+            data2 = datetime.strptime(tmp[1], form_data)
             tmp2 = np.busday_count(data1.strftime('%Y-%m-%d'), data2.strftime('%Y-%m-%d'))
             self.root.ids.ti_resultado.text = str(abs(tmp2)) + ' dias'
             historico = self.root.ids.ti_historico.text
@@ -222,7 +230,7 @@ class CDataApp(App):
         tmp3 = tmp.replace(" ", "")
         if tmp3 != '' and re.fullmatch(regexdata, tmp3):
             try:
-                tmp2 = bool(datetime.strptime(tmp3, '%d/%m/%Y'))
+                tmp2 = bool(datetime.strptime(tmp3, form_data))
             except ValueError:
                 tmp2 = False
         else:
@@ -234,7 +242,7 @@ class CDataApp(App):
         #     print('As datas devem ser inseridas da seguinte forma: 00/00/0000-00/00/0000')
         #     self.root.ids.ti_resultado.text = 'Operação inválida.'
         # else:
-            dt_tmp = datetime.strptime(tmp3, '%d/%m/%Y')
+            dt_tmp = datetime.strptime(tmp3, form_data)
             tmp2 = datetime.strftime(dt_tmp, '%A')
             self.root.ids.ti_resultado.text = tmp2
             historico = self.root.ids.ti_historico.text
@@ -253,8 +261,8 @@ class CDataApp(App):
         # elif tmp[2] not in ('+', '-'):
         #     print('Operação inválida.')
         else:
-            data1 = datetime.strptime(tmp[0], '%d/%m/%Y')
-            data2 = datetime.strptime(tmp[1], '%d/%m/%Y')
+            data1 = datetime.strptime(tmp[0], form_data)
+            data2 = datetime.strptime(tmp[1], form_data)
             timedelta = data1 - data2
             self.root.ids.ti_resultado.text = str(abs(timedelta.days)) + ' dias'
             historico = self.root.ids.ti_historico.text
