@@ -117,7 +117,7 @@ def janela_calculadora():
         [sg.Multiline(k='-SAIDA-', s=(29, 8), border_width=0, do_not_clear=True)],
         [sg.T('Operação:')],
         [sg.I(k='-INPUT1-', s=(20, 1), border_width=0, focus=True, font='_ 14 bold',
-              tooltip='Digite a data (00/00/0000) + ou - a quantidade e clique em um dos botões.'
+              tooltip='Para ajuda clique no botão "Como usar".'
               , enable_events=True)],
         # [sg.I(k='-INPUT2-', s=(26, 1), border_width=0, justification='right')],
         # [sg.I(k='-OPERACAO-', s=(26, 1), border_width=0, justification='right')],
