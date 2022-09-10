@@ -83,23 +83,23 @@ def calcula(data1, valor, operacao, opcao):
     data1_date = datetime.strptime(data1, form_data)
     # data2_date = datetime.strptime(data2, form_data)
     if operacao == '+':
-        if opcao == 'D':
+        if opcao == 'DIAS':
             data_final_date = data1_date + relativedelta(days=int(valor))
         # the_timedelta = data1_date - data2_date
-        elif opcao == 'M':
+        elif opcao == 'MESES':
             data_final_date = data1_date + relativedelta(months=+int(valor))
-        elif opcao == 'A':
+        elif opcao == 'ANOS':
             data_final_date = data1_date + relativedelta(years=int(valor))
         data_final_str = datetime.strftime(data_final_date, form_data)
         return data_final_str
 
     if operacao == '-':
-        if opcao == 'D':
+        if opcao == 'DIAS':
             data_final_date = data1_date - relativedelta(days=int(valor))
         # the_timedelta = data1_date - data2_date
-        elif opcao == 'M':
+        elif opcao == 'MESES':
             data_final_date = data1_date - relativedelta(months=int(valor))
-        elif opcao == 'A':
+        elif opcao == 'ANOS':
             data_final_date = data1_date - relativedelta(years=int(valor))
         data_final_str = datetime.strftime(data_final_date, form_data)
         return data_final_str
@@ -164,6 +164,18 @@ class calculadora:
         self.window = janela_calculadora()
         # self.operacao = False
 
+    def dma_func(self, dma):
+        op = strip_operacao(self.values['-INPUT1-'])
+        if op == 'ERRO':
+            self.window['-OUTPUT-'].update(value='data inválida')
+        else:
+            self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' ' + dma)
+            resultado = calcula(op[0], op[1], op[2], dma)
+            self.window['-OUTPUT-'].update(value=resultado)
+            self.window['-SAIDA-'].print('= ' + resultado)
+            extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
+            self.window['-OUTPUT2-'].update(value=extenso)
+            # self.operacao = False
     def run(self):
         while True:
             self.event, self.values = self.window.read()
@@ -233,46 +245,17 @@ class calculadora:
                     self.window['-OUTPUT-'].update(value='data inválida')
 
             if self.event == '-DIAS-':
-                op = strip_operacao(self.values['-INPUT1-'])
-                if op == 'ERRO':
-                    self.window['-OUTPUT-'].update(value='data inválida')
-                else:
-                    self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' DIAS')
-                    resultado = calcula(op[0], op[1], op[2], 'D')
-                    self.window['-OUTPUT-'].update(value=resultado)
-                    self.window['-SAIDA-'].print('= ' + resultado)
-                    extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
-                    self.window['-OUTPUT2-'].update(value=extenso)
-                    # self.operacao = False
+                self.dma_func('DIAS')
 
             if self.event == '-MESES-':
-                op = strip_operacao(self.values['-INPUT1-'])
-                if op == 'ERRO':
-                    self.window['-OUTPUT-'].update(value='data inválida')
-                else:
-                    self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' MESES')
-                    resultado = calcula(op[0], op[1], op[2], 'M')
-                    self.window['-OUTPUT-'].update(value=resultado)
-                    self.window['-SAIDA-'].print('= ' + resultado)
-                    extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
-                    self.window['-OUTPUT2-'].update(value=extenso)
-                    # self.operacao = False
+                self.dma_func('MESES')
 
             if self.event == '-ANOS-':
-                op = strip_operacao(self.values['-INPUT1-'])
-                if op == 'ERRO':
-                    self.window['-OUTPUT-'].update(value='data inválida')
-                else:
-                    self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' ANOS')
-                    resultado = calcula(op[0], op[1], op[2], 'A')
-                    self.window['-OUTPUT-'].update(value=resultado)
-                    self.window['-SAIDA-'].print('= ' + resultado)
-                    extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
-                    self.window['-OUTPUT2-'].update(value=extenso)
-                    # self.operacao = False
+                self.dma_func('ANOS')
 
             if self.event == '-HOJE-':
                 self.window['-INPUT1-'].update(value=datetime.strftime(date.today(), form_data))
+                self.window['-OUTPUT-'].update(value='')
                 extenso = datetime.strftime(date.today(), '%A, %d de %B de %Y')
                 self.window['-OUTPUT2-'].update(value=extenso)
 
