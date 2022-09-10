@@ -165,17 +165,34 @@ class calculadora:
         # self.operacao = False
 
     def dma_func(self, dma):
-        op = strip_operacao(self.values['-INPUT1-'])
-        if op == 'ERRO':
-            self.window['-OUTPUT-'].update(value='data inválida')
-        else:
-            self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' ' + dma)
-            resultado = calcula(op[0], op[1], op[2], dma)
+        tmp = strip_datas(self.values['-INPUT1-'])
+        if tmp != 'ERRO':
+            data1 = datetime.strptime(tmp[0], form_data)
+            data2 = datetime.strptime(tmp[1], form_data)
+            timedelta = data1 - data2
+            if dma == 'DIAS':
+                resultado = timedelta.days
+            elif dma == 'MESES':
+                resultado = round(timedelta.days / 30)
+            elif dma == 'ANOS':
+                resultado = round((timedelta.days / 365), 2)
             self.window['-OUTPUT-'].update(value=resultado)
-            self.window['-SAIDA-'].print('= ' + resultado)
-            extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
-            self.window['-OUTPUT2-'].update(value=extenso)
-            # self.operacao = False
+            self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' ' + dma)
+            self.window['-SAIDA-'].print('= ' + str(resultado) + ' ' + dma)
+            self.window['-OUTPUT2-'].update(value='')
+        else:
+            op = strip_operacao(self.values['-INPUT1-'])
+            if op == 'ERRO':
+                self.window['-OUTPUT-'].update(value='data inválida')
+            else:
+                self.window['-SAIDA-'].print(self.values['-INPUT1-'] + ' ' + dma)
+                resultado = calcula(op[0], op[1], op[2], dma)
+                self.window['-OUTPUT-'].update(value=resultado)
+                self.window['-SAIDA-'].print('= ' + resultado)
+                extenso = datetime.strftime(datetime.strptime(resultado, form_data), '%A, %d de %B de %Y')
+                self.window['-OUTPUT2-'].update(value=extenso)
+                # self.operacao = False
+
     def run(self):
         while True:
             self.event, self.values = self.window.read()
