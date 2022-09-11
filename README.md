@@ -1,6 +1,6 @@
 ## Calculadora de datas
 
-Dois exemplos do mesmo programa em interfaces gráficas diferentes.
+Três exemplos do mesmo programa em interfaces gráficas diferentes.
 
 Calculadora simples de datas, oferecendo:
 
@@ -9,7 +9,8 @@ Calculadora simples de datas, oferecendo:
 - Dias entre duas datas;
 - Dia da semana por extenso de determinada data.
 
-Os códigos são exemplos de uso das diferentes interfaces, Kivy e PiSimpleGUI.
+Os códigos são exemplos de uso das diferentes interfaces, Kivy, PiSimpleGUI e PyQT5.
+
 
 
 Licença MIT.
