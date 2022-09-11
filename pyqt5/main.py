@@ -7,6 +7,23 @@ from dateutil.relativedelta import relativedelta
 import numpy as np
 import locale
 
+r"""
+Calculadora de datas em PyQT5
+Interface gráfica criada no QT Designer (https://build-system.fman.io/qt-designer-download)
+Conversão da interface pelo comando 'pyuic5 .\design.ui >> design.py' (windows powershell)
+Na importação do módulo, acontece um erro relacionado ao arquivo design.py conter caracteres
+inválidos. Para driblar o erro eu usei o Notepad++ para substituir estes caracteres por vazio.
+É necessário buscar por \x00 marcando a caixa "expressão regular" no canto inferior esquerdo.
+Depois disso o arquivo volta a funcionar normalmente, a menos que o design seja alterado no 
+QT Designer, o que torna todo o processo necessário novamente.
+
+Outra dificuldade que pode ser enfrentada é no caso do debug do código no PyCharm (não sei se
+ocorre em outras IDEs). Durante o percurso de debug ocorre uma falha na biblioteca numpy que
+interrompe o processo. O único modo que encontrei de mitigar o erro foi desabilitar o
+import da biblioteca temporariamente (comentando a linha).
+"""
+
+
 locale.setlocale(locale.LC_ALL, '')
 
 regexdata = re.compile(r'^(\d{2})[-.\/](\d{2})[-.\/](\d{4})$')
@@ -60,23 +77,23 @@ class MyCalculadora(QMainWindow, Ui_MainWindow):
         data1_date = datetime.strptime(data1, form_data)
         # data2_date = datetime.strptime(data2, form_data)
         if operacao == '+':
-            if opcao == 'D':
+            if opcao == 'DIAS':
                 data_final_date = data1_date + relativedelta(days=int(valor))
             # the_timedelta = data1_date - data2_date
-            elif opcao == 'M':
+            elif opcao == 'MESES':
                 data_final_date = data1_date + relativedelta(months=+int(valor))
-            elif opcao == 'A':
+            elif opcao == 'ANOS':
                 data_final_date = data1_date + relativedelta(years=int(valor))
             data_final_str = datetime.strftime(data_final_date, form_data)
             return data_final_str
 
         if operacao == '-':
-            if opcao == 'D':
+            if opcao == 'DIAS':
                 data_final_date = data1_date - relativedelta(days=int(valor))
             # the_timedelta = data1_date - data2_date
-            elif opcao == 'M':
+            elif opcao == 'MESES':
                 data_final_date = data1_date - relativedelta(months=int(valor))
-            elif opcao == 'A':
+            elif opcao == 'ANOS':
                 data_final_date = data1_date - relativedelta(years=int(valor))
             data_final_str = datetime.strftime(data_final_date, form_data)
             return data_final_str
@@ -111,51 +128,75 @@ class MyCalculadora(QMainWindow, Ui_MainWindow):
                 return strings[0], int(strings[1]), '-'
         else:
             return 'ERRO'
+    # EDITANDO
+    def dma_func(self, dma):
+        tmp = self.strip_datas(self.txtOperacao.text())
+        if tmp != 'ERRO':
+            data1 = datetime.strptime(tmp[0], form_data)
+            data2 = datetime.strptime(tmp[1], form_data)
+            timedelta = data1 - data2
+            if dma == 'DIAS':
+                resultado = str(timedelta.days)
+            elif dma == 'MESES':
+                resultado = str(round(timedelta.days / 30))
+            elif dma == 'ANOS':
+                resultado = str(round((timedelta.days / 365), 2))
+            self.txtResultado.setText(resultado)
+        else:
+            op = self.strip_operacao(self.txtOperacao.text())
+            if op == 'ERRO':
+                self.txtResultado.setText('data inválida')
+            else:
+                resultado = self.calcula(op[0], op[1], op[2], dma)
+                self.txtResultado.setText(resultado)
 
     def dias(self):
-        print('hoje')
-        operacao = self.txtOperacao.text()
-        print('operacao:',operacao)
-        op = self.strip_operacao(operacao=operacao)
-        print('op:',op)
-        if op == 'ERRO':
-            self.txtResultado.setText('Operação inválida.')
-        else:
-            print('chegou no resultado')
-            resultado = self.calcula(op[0], op[1], op[2], 'D')
-            self.txtResultado.setText(resultado)
-        print(operacao)
-        # self.txtResultado.setText(operacao)
+        self.dma_func('DIAS')
+        # print('hoje')
+        # operacao = self.txtOperacao.text()
+        # print('operacao:',operacao)
+        # op = self.strip_operacao(operacao=operacao)
+        # print('op:',op)
+        # if op == 'ERRO':
+        #     self.txtResultado.setText('Operação inválida.')
+        # else:
+        #     print('chegou no resultado')
+        #     resultado = self.calcula(op[0], op[1], op[2], 'D')
+        #     self.txtResultado.setText(resultado)
+        # print(operacao)
+        # # self.txtResultado.setText(operacao)
 
     def meses(self):
-        print('hoje')
-        operacao = self.txtOperacao.text()
-        print('operacao:',operacao)
-        op = self.strip_operacao(operacao=operacao)
-        print('op:',op)
-        if op == 'ERRO':
-            self.txtResultado.setText('Operação inválida.')
-        else:
-            print('chegou no resultado')
-            resultado = self.calcula(op[0], op[1], op[2], 'M')
-            self.txtResultado.setText(resultado)
-        print(operacao)
-        # self.txtResultado.setText(operacao)
+        self.dma_func('MESES')
+        # print('hoje')
+        # operacao = self.txtOperacao.text()
+        # print('operacao:',operacao)
+        # op = self.strip_operacao(operacao=operacao)
+        # print('op:',op)
+        # if op == 'ERRO':
+        #     self.txtResultado.setText('Operação inválida.')
+        # else:
+        #     print('chegou no resultado')
+        #     resultado = self.calcula(op[0], op[1], op[2], 'M')
+        #     self.txtResultado.setText(resultado)
+        # print(operacao)
+        # # self.txtResultado.setText(operacao)
 
     def anos(self):
-        print('hoje')
-        operacao = self.txtOperacao.text()
-        print('operacao:',operacao)
-        op = self.strip_operacao(operacao=operacao)
-        print('op:',op)
-        if op == 'ERRO':
-            self.txtResultado.setText('Operação inválida.')
-        else:
-            print('chegou no resultado')
-            resultado = self.calcula(op[0], op[1], op[2], 'A')
-            self.txtResultado.setText(resultado)
-        print(operacao)
-        # self.txtResultado.setText(operacao)
+        self.dma_func('ANOS')
+        # print('hoje')
+        # operacao = self.txtOperacao.text()
+        # print('operacao:',operacao)
+        # op = self.strip_operacao(operacao=operacao)
+        # print('op:',op)
+        # if op == 'ERRO':
+        #     self.txtResultado.setText('Operação inválida.')
+        # else:
+        #     print('chegou no resultado')
+        #     resultado = self.calcula(op[0], op[1], op[2], 'A')
+        #     self.txtResultado.setText(resultado)
+        # print(operacao)
+        # # self.txtResultado.setText(operacao)
 
     def hoje(self):
         self.txtOperacao.setText(datetime.strftime(date.today(), form_data))
