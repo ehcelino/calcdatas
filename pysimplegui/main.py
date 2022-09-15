@@ -216,7 +216,8 @@ class calculadora:
         while True:
             self.event, self.values = self.window.read()
 
-            if self.event == '-INPUT1-' and self.values['-INPUT1-'] and self.values['-INPUT1-'][-1] not in ('0123456789/-+'):
+            if self.event == '-INPUT1-' and self.values['-INPUT1-'] and\
+                    self.values['-INPUT1-'][-1] not in ('0123456789/-+'):
                 self.window['-INPUT1-'].update(self.values['-INPUT1-'][:-1])
 
             if self.event == '-AJUDA-':
